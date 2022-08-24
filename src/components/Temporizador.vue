@@ -4,14 +4,14 @@
           
           <Cronometro :tempoEmSegundos="tempoEmSegundos"/>
           
-          <button class="button" @click="iniciar">
+          <button class="button" @click="iniciar" :disabled="cronometroIniciado">
             <span class="icon">
               <i class="fas fa-play"></i>
             </span>
             <span>play</span>
           </button>
 
-          <button class="button" @click="finalizar">
+          <button class="button" @click="finalizar" :disabled="!cronometroIniciado">
             <span class="icon">
               <i class="fas fa-stop"></i>
             </span>
@@ -35,6 +35,7 @@ export default defineComponent({
     return {
       tempoEmSegundos: 0,
       cronometro: 0,
+      cronometroIniciado: false,
     }
   },
 
@@ -44,11 +45,13 @@ export default defineComponent({
       this.cronometro = setInterval(() => {
         this.tempoEmSegundos += 1
       }, 1000);
+      this.cronometroIniciado = true;
       
     },
     finalizar() {
       console.log("Finalizando...")
       clearInterval(this.cronometro);
+      this.cronometroIniciado = false;
     }
 
   },
