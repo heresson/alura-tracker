@@ -1,25 +1,22 @@
 <template>
-<div class="column">
-        <div class="is-flex is-align-items-center is-justify-content-space-between">
-          
-          <Cronometro :tempoEmSegundos="tempoEmSegundos"/>
-          
-          <button class="button" @click="iniciar" :disabled="cronometroIniciado">
-            <span class="icon">
-              <i class="fas fa-play"></i>
-            </span>
-            <span>play</span>
-          </button>
+  <div class="is-flex is-align-items-center is-justify-content-space-between">
 
-          <button class="button" @click="finalizar" :disabled="!cronometroIniciado">
-            <span class="icon">
-              <i class="fas fa-stop"></i>
-            </span>
-            <span>stop</span>
-          </button>
-        </div>
+    <Cronometro :tempoEmSegundos="tempoEmSegundos" />
 
-      </div>
+    <button class="button" @click="iniciar" :disabled="cronometroIniciado">
+      <span class="icon">
+        <i class="fas fa-play"></i>
+      </span>
+      <span>play</span>
+    </button>
+
+    <button class="button" @click="finalizar" :disabled="!cronometroIniciado">
+      <span class="icon">
+        <i class="fas fa-stop"></i>
+      </span>
+      <span>stop</span>
+    </button>
+  </div>
 </template>
 
 <script lang="ts">
@@ -27,10 +24,11 @@ import { defineComponent } from 'vue'
 import Cronometro from './Cronometro.vue'
 
 export default defineComponent({
-  name: 'Formulario',
+  name: 'Temporizador',
+  emits: ['aoTemporizadorFinalizado'],
   components: {
     Cronometro,
-},
+  },
   data() {
     return {
       tempoEmSegundos: 0,
@@ -46,12 +44,14 @@ export default defineComponent({
         this.tempoEmSegundos += 1
       }, 1000);
       this.cronometroIniciado = true;
-      
+
     },
     finalizar() {
       console.log("Finalizando...")
       clearInterval(this.cronometro);
       this.cronometroIniciado = false;
+      this.$emit('aoTemporizadorFinalizado', this.tempoEmSegundos);
+      this.tempoEmSegundos = 0;
     }
 
   },
