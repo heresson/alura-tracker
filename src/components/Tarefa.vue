@@ -2,18 +2,22 @@
     <Box>
         <div class="columns">
 
-        <div class="column is-7">
-            {{tarefa.descricao || 'Tarefa sem descrição'}}
-        </div>
-        <div class="column">
-            <Cronometro :tempoEmSegundos="tarefa.duracaoEmSegundos"/>
-        </div>
+            <div class="column is-5">
+                {{tarefa.descricao || 'Tarefa sem descrição'}}
+            </div>
+            <div class="column is-4">
+                {{typeof(tarefa.projeto) === 'undefined' ? 'Tarefa sem projeto definido' : tarefa.projeto.nome}}
+            </div>
+            <div class="column">
+                <Cronometro :tempoEmSegundos="tarefa.duracaoEmSegundos" />
+            </div>
         </div>
     </Box>
 </template>
 
 <script lang="ts">
 import ITarefa from '@/interfaces/ITarefa';
+import IProjeto from '@/interfaces/IProjeto';
 import {defineComponent, PropType} from 'vue'
 import Cronometro from './Cronometro.vue';
 import Box from './Box.vue';
