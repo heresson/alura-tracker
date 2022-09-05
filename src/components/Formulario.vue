@@ -24,7 +24,7 @@
         </div>
       </div>
       <div class="column">
-        <Temporizador @aoFinalizarTarefa="salvarTarefa"/>
+        <Temporizador @aoTemporizadorFinalizado="salvarTarefa"/>
       </div>
     </div>
   </div>
