@@ -32,7 +32,6 @@ export default defineComponent({
 
   methods: {
     iniciar() {
-      console.log("Iniciando...")
       this.cronometro = setInterval(() => {
         this.tempoEmSegundos += 1
       }, 1000);
@@ -40,7 +39,6 @@ export default defineComponent({
 
     },
     finalizar() {
-      console.log("Finalizando...")
       clearInterval(this.cronometro);
       this.cronometroIniciado = false;
       this.$emit('aoTemporizadorFinalizado', this.tempoEmSegundos);
