@@ -18,7 +18,7 @@
                 <Cronometro :tempoEmSegundos="tarefa.duracaoEmSegundos" />
             </div>
             <div class="column is-1">
-                <button class="button ml-2" @click="permitirEdicao = !permitirEdicao">
+                <button class="button ml-2" @click="habilitarEdicao">
                     <span class="icon is-small">
                         <i class="fas fa-pencil-alt"></i>
                     </span>
@@ -71,6 +71,10 @@ export default defineComponent({
     methods: {
         excluir(id: string) {
             this.store.commit(REMOVE_TAREFA, id);
+        },
+        habilitarEdicao() {
+            this.permitirEdicao = !this.permitirEdicao
+            this.novoNome = this.tarefa.descricao
         },
         editarTarefa(){
             this.store.commit(ATUALIZA_TAREFA, {
