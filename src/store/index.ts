@@ -5,6 +5,7 @@ import { InjectionKey } from 'vue'
 import { ADICIONA_PROJETO, ALTERA_PROJETO, EXCLUI_PROJETO } from "./metodos-projetos";
 import { ADICIONA_TAREFA, ATUALIZA_TAREFA, REMOVE_TAREFA } from "./metodos-tarefas";
 import INotificacao, { TipoNotificacao } from "@/interfaces/INotificacao";
+import { NOTIFICAR } from "./metodos-notificacoes";
 
 
 interface Estado {
@@ -19,26 +20,7 @@ export const store = createStore<Estado>({
     state: {
         projetos: [],
         tarefas: [],
-        notificacoes: [
-            {
-                id: 1,
-                texto: 'Uma notificacao de sucesso',
-                titulo: 'sucesso',
-                tipo: TipoNotificacao.SUCESSO
-            },
-            {
-                id: 2,
-                texto: 'Uma notificacao de atencao',
-                titulo: 'sucesso',
-                tipo: TipoNotificacao.ATENCAO
-            },
-            {
-                id: 3,
-                texto: 'Uma notificacao de falha',
-                titulo: 'sucesso',
-                tipo: TipoNotificacao.FALHA
-            },
-        ],
+        notificacoes: [],
     },
     mutations: {
         [ADICIONA_PROJETO](state, nomeDoProjeto: string) {
@@ -66,6 +48,13 @@ export const store = createStore<Estado>({
         [REMOVE_TAREFA](state, id: string) {
             state.tarefas = state.tarefas.filter(p => p.id != id)
         },
+        [NOTIFICAR](state, novaNotificacao: INotificacao) {
+            novaNotificacao.id = new Date().toISOString();
+            state.notificacoes.push(novaNotificacao)
+            setTimeout(() => {
+                state.notificacoes = state.notificacoes.filter( notificacao => notificacao.id != novaNotificacao.id)
+            }, 3000);
+        }
     }
 })
 

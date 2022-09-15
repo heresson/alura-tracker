@@ -13,20 +13,22 @@
 </template>
 
 <script lang="ts">
+import { TipoNotificacao } from "@/interfaces/INotificacao";
 import { useStore } from "@/store";
+import { NOTIFICAR } from "@/store/metodos-notificacoes";
 import { ALTERA_PROJETO, ADICIONA_PROJETO } from "@/store/metodos-projetos";
 import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "Formulario",
-  props:{
+  props: {
     id: {
       type: String
     }
   },
-  mounted () {
-    if(this.id) {
-      const projeto = this.store.state.projetos.find( proj => proj.id == this.id)
+  mounted() {
+    if (this.id) {
+      const projeto = this.store.state.projetos.find(proj => proj.id == this.id)
       this.nomeDoProjeto = projeto?.nome || ''
     }
   },
@@ -45,11 +47,16 @@ export default defineComponent({
       } else {
         this.store.commit(ADICIONA_PROJETO, this.nomeDoProjeto)
       }
-    this.nomeDoProjeto = "";
-    this.$router.push('/projetos')
+      this.$router.push('/projetos')
+      this.store.commit(NOTIFICAR, {
+        titulo: 'Projeto Salvo',
+        texto: `Projeto ${this.nomeDoProjeto} incluído com sucesso`,
+        tipo: TipoNotificacao.SUCESSO,
+      })
+      this.nomeDoProjeto = "";
     },
   },
-  setup () {
+  setup() {
     const store = useStore()
     return {
       store
