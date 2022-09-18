@@ -6,12 +6,15 @@ import { ADICIONA_PROJETO, ALTERA_PROJETO, EXCLUI_PROJETO } from "./metodos-proj
 import { ADICIONA_TAREFA, ATUALIZA_TAREFA, REMOVE_TAREFA } from "./metodos-tarefas";
 import INotificacao, { TipoNotificacao } from "@/interfaces/INotificacao";
 import { NOTIFICAR } from "./metodos-notificacoes";
+import ICronometro from "@/interfaces/ICronometro";
+import { INICIAR_CRONOMETRO, PARAR_CRONOMETRO } from "./metodos-cronometro";
 
 
 interface Estado {
     projetos: IProjeto[],
     tarefas: ITarefa[],
     notificacoes: INotificacao[],
+    temporizador: ICronometro,
 }
 
 export const key: InjectionKey<Store<Estado>> = Symbol()
@@ -21,6 +24,11 @@ export const store = createStore<Estado>({
         projetos: [],
         tarefas: [],
         notificacoes: [],
+        temporizador: {
+            cronometro: 0,
+            tempoEmSegundos: 0,
+            cronometroIniciado: false,
+        }
     },
     mutations: {
         [ADICIONA_PROJETO](state, nomeDoProjeto: string) {
@@ -54,7 +62,19 @@ export const store = createStore<Estado>({
             setTimeout(() => {
                 state.notificacoes = state.notificacoes.filter( notificacao => notificacao.id != novaNotificacao.id)
             }, 3000);
-        }
+        },
+        [INICIAR_CRONOMETRO](state) {
+            state.temporizador.tempoEmSegundos = 0
+            state.temporizador.cronometro = setInterval(() => {
+                state.temporizador.tempoEmSegundos +=1;
+            }, 1000);
+            state.temporizador.cronometroIniciado = true
+        },
+        [PARAR_CRONOMETRO](state) {
+            clearInterval(state.temporizador.cronometro);
+            state.temporizador.cronometroIniciado = false;
+            
+        },
     }
 })
 

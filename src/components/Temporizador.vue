@@ -1,19 +1,21 @@
 <template>
   <div class="is-flex is-align-items-center is-justify-content-space-between">
 
-    <Cronometro :tempoEmSegundos="tempoEmSegundos" />
+    <Cronometro :tempoEmSegundos="temporizador.tempoEmSegundos" />
 
-    <Botao @clicado="iniciar" icone="fas fa-play" texto="play" :desabilitado="cronometroIniciado" />
-    
-    <Botao @clicado="finalizar" icone="fas fa-stop" texto="stop" :desabilitado="!cronometroIniciado" />
+    <Botao @clicado="iniciar" icone="fas fa-play" texto="play" :desabilitado="temporizador.cronometroIniciado" />
+
+    <Botao @clicado="finalizar" icone="fas fa-stop" texto="stop" :desabilitado="!temporizador.cronometroIniciado" />
 
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
 import Cronometro from './Cronometro.vue'
 import Botao from './Botao.vue'
+import { useStore } from '@/store'
+import { INICIAR_CRONOMETRO, PARAR_CRONOMETRO } from '@/store/metodos-cronometro'
 
 export default defineComponent({
   name: 'Temporizador',
@@ -22,27 +24,27 @@ export default defineComponent({
     Cronometro,
     Botao,
   },
-  data() {
+  setup() {
+    const store = useStore()
     return {
-      tempoEmSegundos: 0,
-      cronometro: 0,
-      cronometroIniciado: false,
+      temporizador: computed(() => store.state.temporizador),
+      store,
     }
   },
 
+
   methods: {
     iniciar() {
-      this.cronometro = setInterval(() => {
-        this.tempoEmSegundos += 1
-      }, 1000);
-      this.cronometroIniciado = true;
+      this.store.commit(INICIAR_CRONOMETRO);
+      
 
     },
     finalizar() {
-      clearInterval(this.cronometro);
-      this.cronometroIniciado = false;
-      this.$emit('aoTemporizadorFinalizado', this.tempoEmSegundos);
-      this.tempoEmSegundos = 0;
+      this.store.commit(PARAR_CRONOMETRO);
+      console.log("PARANDO...")
+      console.log(this.temporizador)
+      this.$emit('aoTemporizadorFinalizado', this.temporizador.tempoEmSegundos);
+
     }
 
   },
