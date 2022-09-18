@@ -4,10 +4,10 @@ import { createStore, Store, useStore as vuexUseStore } from "vuex";
 import { InjectionKey } from 'vue'
 import { ADICIONA_PROJETO, ALTERA_PROJETO, EXCLUI_PROJETO } from "./metodos-projetos";
 import { ADICIONA_TAREFA, ATUALIZA_TAREFA, REMOVE_TAREFA } from "./metodos-tarefas";
-import INotificacao, { TipoNotificacao } from "@/interfaces/INotificacao";
+import INotificacao from "@/interfaces/INotificacao";
 import { NOTIFICAR } from "./metodos-notificacoes";
 import ICronometro from "@/interfaces/ICronometro";
-import { INICIAR_CRONOMETRO, PARAR_CRONOMETRO } from "./metodos-cronometro";
+import { FALHA_CRONOMETRO, INICIAR_CRONOMETRO, PARAR_CRONOMETRO, ZERAR_CRONOMETRO } from "./metodos-cronometro";
 
 
 interface Estado {
@@ -28,6 +28,7 @@ export const store = createStore<Estado>({
             cronometro: 0,
             tempoEmSegundos: 0,
             cronometroIniciado: false,
+            falha: false,
         }
     },
     mutations: {
@@ -74,6 +75,17 @@ export const store = createStore<Estado>({
             clearInterval(state.temporizador.cronometro);
             state.temporizador.cronometroIniciado = false;
             
+        },
+        [FALHA_CRONOMETRO](state, isFalha: boolean) {
+            state.temporizador.falha = isFalha;
+        },
+        [ZERAR_CRONOMETRO](state) {
+            state.temporizador = {
+                cronometro: 0,
+                tempoEmSegundos: 0,
+                cronometroIniciado: false,
+                falha: false,
+            }
         },
     }
 })

@@ -15,11 +15,11 @@ import { defineComponent, computed } from 'vue'
 import Cronometro from './Cronometro.vue'
 import Botao from './Botao.vue'
 import { useStore } from '@/store'
-import { INICIAR_CRONOMETRO, PARAR_CRONOMETRO } from '@/store/metodos-cronometro'
+import { INICIAR_CRONOMETRO, PARAR_CRONOMETRO, ZERAR_CRONOMETRO } from '@/store/metodos-cronometro'
 
 export default defineComponent({
   name: 'Temporizador',
-  emits: ['aoTemporizadorFinalizado'],
+  emits: ['aoTemporizadorFinalizado', 'aoTemporizadorIniciado'],
   components: {
     Cronometro,
     Botao,
@@ -35,16 +35,16 @@ export default defineComponent({
 
   methods: {
     iniciar() {
-      this.store.commit(INICIAR_CRONOMETRO);
-      
+      this.$emit('aoTemporizadorIniciado');
 
+      if (!this.temporizador.falha) {
+        this.store.commit(INICIAR_CRONOMETRO);
+      }
     },
     finalizar() {
       this.store.commit(PARAR_CRONOMETRO);
-      console.log("PARANDO...")
-      console.log(this.temporizador)
       this.$emit('aoTemporizadorFinalizado', this.temporizador.tempoEmSegundos);
-
+      this.store.commit(ZERAR_CRONOMETRO);
     }
 
   },
