@@ -39,12 +39,14 @@
 <script lang="ts">
 import { useStore } from "@/store";
 import { EXCLUI_PROJETO } from "@/store/metodos-projetos";
+import { OBTER_PROJETOS } from "@/store/tipo-acoes";
 import { computed, defineComponent } from "vue";
 
 export default defineComponent({
   name: "Lista",
   setup() {
     const store = useStore()
+    store.dispatch(OBTER_PROJETOS)
     return {
       projetos: computed(() => store.state.projetos),
       store,

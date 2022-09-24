@@ -2,13 +2,14 @@ import IProjeto from "@/interfaces/IProjeto";
 import ITarefa from "@/interfaces/ITarefa";
 import { createStore, Store, useStore as vuexUseStore } from "vuex";
 import { InjectionKey } from 'vue'
-import { ADICIONA_PROJETO, ALTERA_PROJETO, EXCLUI_PROJETO } from "./metodos-projetos";
+import { ADICIONA_PROJETO, ALTERA_PROJETO, DEFINIR_PROJETOS, EXCLUI_PROJETO } from "./metodos-projetos";
 import { ADICIONA_TAREFA, ATUALIZA_TAREFA, REMOVE_TAREFA } from "./metodos-tarefas";
 import INotificacao from "@/interfaces/INotificacao";
 import { NOTIFICAR } from "./metodos-notificacoes";
 import ICronometro from "@/interfaces/ICronometro";
 import { FALHA_CRONOMETRO, INICIAR_CRONOMETRO, PARAR_CRONOMETRO, ZERAR_CRONOMETRO } from "./metodos-cronometro";
-
+import { OBTER_PROJETOS } from "./tipo-acoes";
+import http from '@/http'
 
 interface Estado {
     projetos: IProjeto[],
@@ -45,6 +46,9 @@ export const store = createStore<Estado>({
         },
         [EXCLUI_PROJETO](state, id: string) {
             state.projetos = state.projetos.filter(proj => proj.id != id)
+        },
+        [DEFINIR_PROJETOS](state, projetos: IProjeto[]) {
+            state.projetos = projetos
         },
         [ADICIONA_TAREFA](state, tarefa: ITarefa) {
             tarefa.id = new Date().toISOString()
@@ -87,7 +91,14 @@ export const store = createStore<Estado>({
                 falha: false,
             }
         },
-    }
+        
+    },
+    actions: {
+        [OBTER_PROJETOS] ({ commit }) {
+            http.get('projetos')
+            .then(resposta => commit(DEFINIR_PROJETOS, resposta.data) )
+        },
+    },
 })
 
 export function useStore(): Store<Estado> {
