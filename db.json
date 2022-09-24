@@ -2,7 +2,11 @@
   "projetos": [
     {
       "id": 1,
-      "nome": "Alura Tracker 2"
+      "nome": "Alura Tracker 3"
+    },
+    {
+      "nome": "projeto 2",
+      "id": 2
     }
-  ]  
+  ]
 }
