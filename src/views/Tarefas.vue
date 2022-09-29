@@ -19,6 +19,7 @@ import ITarefa from '../interfaces/ITarefa';
 import Box from '../components/Box.vue';
 import { useStore } from '@/store';
 import { ADICIONA_TAREFA } from '@/store/metodos-tarefas';
+import { OBTER_TAREFAS } from '@/store/tipo-acoes';
 
 
 export default defineComponent({
@@ -36,6 +37,7 @@ export default defineComponent({
     },
     setup() {
         const store = useStore()
+        store.dispatch(OBTER_TAREFAS)
         return {
             tarefas: computed(() => store.state.tarefas),
             store,

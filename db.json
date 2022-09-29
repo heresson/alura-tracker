@@ -8,5 +8,14 @@
       "nome": "projeto 2",
       "id": 2
     }
+  ],
+  "tarefas": [
+    {
+      "id": 1,
+      "duracaoEmSegundos": 240,
+      "descricao": "teste 1",
+      "projeto": { "id": 1, "nome": "Alura Tracker 3"
+     }
+    }
   ]
 }
